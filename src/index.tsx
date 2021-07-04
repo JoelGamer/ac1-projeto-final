@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import App from './pages/App';
 import reportWebVitals from './reportWebVitals';
+import './styles/index.scss';
+import 'primereact/resources/primereact.min.css';
+import 'primereact/resources/themes/md-dark-indigo/theme.css';
+import 'primeicons/primeicons.css';
 
 ReactDOM.render(
   <React.StrictMode>

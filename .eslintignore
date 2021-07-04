@@ -1,0 +1,2 @@
+# Foi necessário tirar o cypress do lint pois os padrões são diferentes
+/cypress/**/*.js

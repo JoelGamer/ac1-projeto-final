@@ -1,0 +1,17 @@
+.exemplo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+
+  &-aplicacoes {
+    color: white;
+    margin: 10px;
+    margin-bottom: 20px;
+
+    .p-component {
+      font-size: small;
+    }
+  }
+}

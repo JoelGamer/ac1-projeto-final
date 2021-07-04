@@ -1,0 +1,60 @@
+.processador {
+  &-row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &-SP {
+    display: flex;
+    background-color: gray;
+    margin: 5px;
+    height: 75px;
+    width: 125px;
+
+    .text-content {
+      flex: 1;
+      align-self: center;
+  
+      p {
+        text-align: center;
+        margin: 5px;
+      }
+    }
+  } 
+  
+  &-GMP {
+    display: flex;
+    background-color: white;
+    margin: 5px;
+    height: 75px;
+    width: 125px;
+
+    .text-content {
+      flex: 1;
+      align-self: center;
+  
+      p {
+        text-align: center;
+        margin: 5px;
+      }
+    }
+  } 
+
+  &-LMP {
+    display: flex;
+    background-color: darkgoldenrod;
+    margin: 5px;
+    height: 75px;
+    width: 125px;
+
+    .text-content {
+      flex: 1;
+      align-self: center;
+  
+      p {
+        text-align: center;
+        margin: 5px;
+      }
+    }
+  }
+}
