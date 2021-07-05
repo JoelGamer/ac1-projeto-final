@@ -3,9 +3,17 @@ import ProcessorService from './processor';
 
 class ProcessManager {
   private _processors: ProcessorService[] = [];
+  running: boolean = false;
 
   init() {
     this._processors = [];
+  }
+
+  run() {
+    if (!this.running) {
+      this.running = true;
+      this.dispatchProcessManagerEvent('running');
+    }
   }
 
   get processors() {
@@ -35,6 +43,11 @@ class ProcessManager {
 
   addProcessor(processor: ProcessorService) {
     this._processors.push(processor)
+  }
+
+  private dispatchProcessManagerEvent(type: string) {
+    const event = new CustomEvent(`process-${type}`);
+    dispatchEvent(event);
   }
 }
 

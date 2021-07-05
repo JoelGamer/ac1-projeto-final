@@ -3,6 +3,8 @@ import { TabMenu, TabMenuTabChangeParams } from 'primereact/tabmenu';
 import Exemplo from './exemplo';
 import Home from './home';
 import { examples } from '../tasks/examples';
+import { Example } from '../@types/types';
+import processManager from '../services/process-manager';
 
 const items = [
   { label: 'Home', icon: 'pi pi-fw pi-home' },
@@ -15,10 +17,13 @@ const items = [
 
 const App = () => {
   const [tabIndex, setTabIndex] = useState(0);
-  const example = useMemo(() => examples[tabIndex - 1], [tabIndex]);
+  const [example, setExample] = useState<Example>();
 
   const onTabChange = (e: TabMenuTabChangeParams) => {
     setTabIndex(e.index);
+    processManager.running = false;
+
+    setExample(examples[e.index - 1])
   };
 
   return (
@@ -27,7 +32,7 @@ const App = () => {
       {tabIndex === 0 ? (
         <Home />
       ) : (
-        <Exemplo example={example} />
+        example && <Exemplo example={example} />
       )}
     </div>
   );

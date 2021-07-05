@@ -23,7 +23,7 @@ export interface Example {
   cluster: Cluster;
   maxTasksPerProcessor: number;
   timeout: number;
-  apps: ExampleApplication[]
+  apps: ExampleApplication[];
 }
 
 interface ApplicationTaskCommunications {

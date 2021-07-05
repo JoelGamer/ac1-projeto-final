@@ -1,5 +1,6 @@
 import { FC, useEffect, useState, useMemo } from 'react';
 import { ApplicationTask, ProcessorType } from '../@types/types';
+import processManager from '../services/process-manager';
 import ProcessorService from '../services/processor';
 
 const MaxTasksText: FC<MaxTasksTextProps> = (props) => {
@@ -31,6 +32,11 @@ const Processor: FC<ProcessorProps> = ({ service, ...props }) => {
   const [queuedTask, setQueuedTask] = useState<ApplicationTask | undefined>(undefined);
   const [currentTasks, setCurrentTasks] = useState(service.tasks.length);
 
+  const onProcessorClick = () => {
+    if (service.type !== 'GMP') return;
+    processManager.run();
+  };
+
   useEffect(() => {
     addEventListener(`processor-${props.id}-tasks`, (() => {
       setCurrentTasks(service.tasks.length);
@@ -38,14 +44,13 @@ const Processor: FC<ProcessorProps> = ({ service, ...props }) => {
 
     if (service.type === 'LMP') {
       addEventListener(`processor-${props.id}-queuedTask`, (() => {
-        console.log('dispatched!', service.queuedTask)
         setQueuedTask(service.queuedTask);
       }));
     }
   }, []);
 
   return (
-    <div className={`processador-${props.type}`}>
+    <div className={`processador-${props.type}`} onClick={onProcessorClick}>
       <div className="text-content">
         <p>{props.type}</p>
         {props.type === 'SP' && <MaxTasksText currentTasks={currentTasks} maxTasks={service.maxTasks} />}

@@ -9,8 +9,6 @@ import processManager from '../services/process-manager';
 import ProcessorService from '../services/processor';
 
 const buildMPSoC = (mpsoc: MPSoC, maxTasks: number) => {
-  processManager.init();
-
   for (let i = 0; i < mpsoc.x; i++) {
     for (let j = 0; j < mpsoc.y; j++) {
       const key = `${i}-${j}`;
@@ -78,11 +76,14 @@ const queryApplicationTask = (task: ApplicationTask, spiral: string[]) => {
       processManager.getLMPProcessor().addQueuedTask(undefined);
       break;
     };
+
     spiralIndex++;
   }
 };
 
 const Exemplo: FC<ExemploProps> = ({ example }) => {
+  const [running, setRunning] = useState(false);
+  const [taskManager, setTaskManager] = useState<NodeJS.Timeout>();
   const [processors, setProcessors] = useState<JSX.Element[]>([]);
   const spiral = useMemo(() => calculateSpiral(example.mpsoc.x, example.mpsoc.y), [example.mpsoc]);
   const apps = useMemo(() => getExampleApps(example.apps), [example.apps]);
@@ -99,19 +100,34 @@ const Exemplo: FC<ExemploProps> = ({ example }) => {
   }, [example.mpsoc, example.maxTasksPerProcessor]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (tasks.length > 0) {
-        const task = tasks.shift();
-        
-        if (task) {
-          queryApplicationTask(task, spiral)
-          processManager.getLMPProcessor().addQueuedTask(tasks[0]);
-        };
-      }
-    }, example.timeout);
+    addEventListener('process-running', () => {
+      setRunning(true);
+    });
+  }, []);
 
-    return () => clearInterval(interval);
-  }, [example.mpsoc])
+  useEffect(() => {
+    if (!running) {
+      if (taskManager) clearInterval(taskManager);
+    }
+  }, [running]);
+
+  useEffect(() => {
+    if (!taskManager && running) {
+      setTaskManager(setInterval(() => {
+        if (tasks.length > 0) {
+          const task = tasks.shift();
+          console.log('task', task)
+          
+          if (task) {
+            queryApplicationTask(task, spiral);
+            processManager.getLMPProcessor().addQueuedTask(tasks[0]);
+          };
+        } else {
+          setRunning(false);
+        }
+      }, example.timeout));
+    }
+  }, [running]);
   
   return (
     <div className="exemplo">
